@@ -14,7 +14,9 @@ class HomePage extends StatelessWidget {
             
               children: [
               
-                Header(),
+                Header(
+                  title: "Dashboard",
+                ),
                 const SizedBox(height: 10,),
                 Row(
 

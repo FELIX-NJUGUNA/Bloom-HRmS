@@ -2,20 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Header extends StatelessWidget {
+
+  final String title;
   const Header({
-    super.key,
+    super.key, required this.title,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text("Dashboard", style: Theme.of(context).textTheme.headlineMedium,),
+        Text(title, style: Theme.of(context).textTheme.headlineMedium,),
       const   Spacer(flex: 2,),
         Expanded(
           child: SearchField(),
         
            ),
+           const SizedBox(width: 10,),
+
+           Container(
+            margin: EdgeInsets.symmetric(horizontal:2),
+            padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            child: SvgPicture.asset('lib/assets/icons/notification.svg', color: Theme.of(context).colorScheme.secondary,),
+          ),
+
+        
     
         ProfileCard()
     
