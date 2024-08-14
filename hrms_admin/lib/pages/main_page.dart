@@ -10,21 +10,24 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: SafeArea(
+      body:const SafeArea(
         child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              
-              child: Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+
+            
+                
+             Expanded(
+               
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(10.0),
                   child: SideMenu(),
                 ),
-              )
-            ),
-
+              
+              ),
+          
             Expanded(
+              
             
               flex: 5,
               child:HomePage(),
