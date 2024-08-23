@@ -23,9 +23,8 @@
       @override
       Widget build(BuildContext context) {
         return MaterialApp(
-
           home: const MainPage(),
-          theme: Provider.of<ThemeProvider>(context).themeData,
+          theme: Provider.of<ThemeProvider>(context, listen: false).themeData,
         );
       }
     }

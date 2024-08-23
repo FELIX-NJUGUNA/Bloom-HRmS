@@ -1,131 +1,180 @@
+import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hrms_admin/themes/theme_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:hrms_admin/pages/attendance_page.dart';
+import 'package:hrms_admin/pages/employees_page.dart';
+import 'package:hrms_admin/pages/home_page.dart';
+import 'package:hrms_admin/pages/leave_page.dart';
+import 'package:hrms_admin/pages/settings_page.dart';
 
-
-class SideMenu extends StatelessWidget {
-  const SideMenu({
-    super.key,
-  });
+class SideMenu extends StatefulWidget {
+  const SideMenu({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius:const  BorderRadius.only(
-        topLeft: Radius.circular(10),
-        bottomLeft: Radius.circular(10),
-      ),
-      child: Drawer(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        
-             
-        child: SingleChildScrollView(
-            child: Column(
-              
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-              
-        
-              Padding(
-                padding: const EdgeInsets.all(0),
-                child: DrawerHeader(
-                  
-                  child: SvgPicture.asset('lib/assets/images/bloom.svg', height: 50, color: Theme.of(context).colorScheme.inversePrimary,) ),
-              ),
-            
-                DrawerListTile(
-                  title: 'Dashboard', 
-                  svgIcon: "lib/assets/icons/menu_dashboard.svg",
-                  press: () {  },),
-            
-                 DrawerListTile(
-                  title: 'Attendance', 
-                 svgIcon: "lib/assets/icons/menu_time.svg",
-                  press: () {  },),
-            
-                   DrawerListTile(
-                  title: 'Employees', 
-                  svgIcon: "lib/assets/icons/menu_employees.svg", 
-                  press: () {  },),
-        
-                   DrawerListTile(
-                  title: 'Leaves', 
-                  svgIcon: "lib/assets/icons/menu_leaves.svg", 
-                  press: () {  },),
-      
-                  SizedBox(height: 40,),
-            
-                  DrawerListTile(
-                  title: 'Settings', 
-                  svgIcon: "lib/assets/icons/settings.svg", 
-                  press: () {  },),
-            
-                  DrawerListTile(
-                  title: 'Profile', 
-                  svgIcon: "lib/assets/icons/menu_profile.svg", 
-                  press: () {  },),
-
-
-                  SizedBox(height: 70,),
-      
-      
-                  DrawerListTile(
-                  title: 'Logout', 
-                  svgIcon: "lib/assets/icons/logout.svg", 
-                  press: () {  },),
-        
-        
-        
-                   Row(
-                    mainAxisSize: MainAxisSize.min              ,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     children: [
-        
-                        Text("Light", style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
-                       CupertinoSwitch(
-                        
-                        value: Provider.of<ThemeProvider>(context, listen: false).isDarkMode,
-                        onChanged: (value) =>
-                          Provider.of<ThemeProvider>(context, listen: false).toggleThemes(),
-                        ),
-        
-                        Text("Dark", style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
-        
-                     ],
-                   ),
-        
-                
-        
-            ],),
-          ),
-      ),
-    );
-    
-  }
+  State<SideMenu> createState() => _SideMenuState();
 }
 
+class _SideMenuState extends State<SideMenu> {
+  late List<CollapsibleItem> _items;
+  bool _isCollapsed = true;
+  late PageController _pageController;
 
-// drawer list tile
-class DrawerListTile extends StatelessWidget {
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _items = _generateItems;
+  }
 
-  final String title, svgIcon;
-  final VoidCallback press;
+  List<CollapsibleItem> get _generateItems {
+    return [
+      CollapsibleItem(
+        text: "Home",
+        icon: CupertinoIcons.home,
+        onPressed: () => _navigateToPage(0),
+        isSelected: true,
+      ),
+      CollapsibleItem(
+        text: "Attendance",
+        icon: CupertinoIcons.time,
+        onPressed: () => _navigateToPage(1),
+      ),
+      CollapsibleItem(
+        text: "Employees",
+        icon: CupertinoIcons.person,
+        onPressed: () => _navigateToPage(2),
+      ),
+      CollapsibleItem(
+        text: "Leaves",
+        icon: CupertinoIcons.briefcase,
+        onPressed: () => _navigateToPage(3),
+      ),
+      CollapsibleItem(
+        text: "Settings",
+        icon: CupertinoIcons.settings,
+        onPressed: () => _navigateToPage(4),
+      ),
+      CollapsibleItem(
+        text: "Logout",
+        icon: CupertinoIcons.back,
+        onPressed: () {
+          // Handle logout
+        },
+      ),
+    ];
+  }
 
-  const DrawerListTile({
-    super.key, required this.title, required this.svgIcon, required this.press,
-  });
+  void _navigateToPage(int index) {
+    setState(() {
+      _pageController.animateToPage(
+        index,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      
-      
-      onTap: press, 
-    // ignore: deprecated_member_use
-    leading: SvgPicture.asset(svgIcon, height:18,color: Theme.of(context).colorScheme.inversePrimary,) ,
-      title: Text(title),                  
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _isCollapsed = !_isCollapsed;
+                  });
+                },
+                icon: SvgPicture.asset(
+                  'lib/assets/images/bloom.svg',
+                  height: 30,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+            ),
+            title: Padding(
+              padding: const EdgeInsets.only(left: 650), // Adjusted padding
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                    prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onBackground),
+                    border: InputBorder.none,
+                  ),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.notifications, color: Theme.of(context).colorScheme.primary),
+                onPressed: () {
+                  // Handle notification icon press
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.account_circle, color: Theme.of(context).colorScheme.primary),
+                onPressed: () {
+                  // Handle profile icon press
+                },
+              ),
+              SizedBox(width: 8),
+            ],
+            elevation: 0,
+          ),
+        ),
+      ),
+      body: Row(
+        children: [
+          Container(
+            width: _isCollapsed ? 75 : 220, // Collapsed and expanded width
+            child: CollapsibleSidebar(
+              isCollapsed: _isCollapsed,
+              items: _items,
+              showTitle: false,
+              sidebarBoxShadow: [], // Removed shadow
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              showToggleButton: false,
+              unselectedIconColor: Theme.of(context).colorScheme.inversePrimary,
+              unselectedTextColor: Theme.of(context).colorScheme.inversePrimary,
+              iconSize: 24, // Smaller icon size for minimalistic look
+              selectedIconColor: Theme.of(context).colorScheme.secondary,
+              textStyle: TextStyle(
+                fontSize: 16
+              ),
+              body: Container(),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: PageView(
+                controller: _pageController,
+                children: [
+                  HomePage(),
+                  AttendancePage(),
+                  EmployeesPage(),
+                  LeavePage(),
+                  SettingsPage(),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
-  } 
+  }
 }
