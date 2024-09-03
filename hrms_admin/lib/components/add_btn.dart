@@ -18,7 +18,7 @@ class AddBtn extends StatelessWidget {
       child: Container(
         
        decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.inversePrimary,
         borderRadius: BorderRadius.circular(15)
         
       ),

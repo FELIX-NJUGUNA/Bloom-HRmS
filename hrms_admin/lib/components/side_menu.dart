@@ -1,7 +1,7 @@
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrms_admin/pages/attendance_page.dart';
 import 'package:hrms_admin/pages/employees_page.dart';
 import 'package:hrms_admin/pages/home_page.dart';
@@ -55,13 +55,6 @@ class _SideMenuState extends State<SideMenu> {
         icon: CupertinoIcons.settings,
         onPressed: () => _navigateToPage(4),
       ),
-      CollapsibleItem(
-        text: "Logout",
-        icon: CupertinoIcons.back,
-        onPressed: () {
-          // Handle logout
-        },
-      ),
     ];
   }
 
@@ -100,22 +93,23 @@ class _SideMenuState extends State<SideMenu> {
               ),
             ),
             title: Padding(
-              padding: const EdgeInsets.only(left: 650), // Adjusted padding
+              padding: const EdgeInsets.only(left: 550), // Adjusted padding
               child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                  borderRadius: BorderRadius.circular(20.0),
+                
+                
+                
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("bloom",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      
+                    )
+                    ),
+                  ],
                 ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search...',
-                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                    prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onBackground),
-                    border: InputBorder.none,
-                  ),
-                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                ),
+                  
               ),
             ),
             actions: <Widget>[
@@ -141,21 +135,49 @@ class _SideMenuState extends State<SideMenu> {
         children: [
           Container(
             width: _isCollapsed ? 75 : 220, // Collapsed and expanded width
-            child: CollapsibleSidebar(
-              isCollapsed: _isCollapsed,
-              items: _items,
-              showTitle: false,
-              sidebarBoxShadow: [], // Removed shadow
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              showToggleButton: false,
-              unselectedIconColor: Theme.of(context).colorScheme.inversePrimary,
-              unselectedTextColor: Theme.of(context).colorScheme.inversePrimary,
-              iconSize: 24, // Smaller icon size for minimalistic look
-              selectedIconColor: Theme.of(context).colorScheme.secondary,
-              textStyle: TextStyle(
-                fontSize: 16
-              ),
-              body: Container(),
+            child: Stack(
+              children: [
+                CollapsibleSidebar(
+                  isCollapsed: _isCollapsed,
+                  items: _items,
+                  showTitle: false,
+                  sidebarBoxShadow: [], // Removed shadow
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  showToggleButton: false,
+                  unselectedIconColor: Theme.of(context).colorScheme.inversePrimary,
+                  unselectedTextColor: Theme.of(context).colorScheme.inversePrimary,
+                  iconSize: 24, // Smaller icon size for minimalistic look
+                  selectedIconColor: Theme.of(context).colorScheme.secondary,
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                  ),
+                  body: Container(),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Divider(color: Colors.white70),
+                        GestureDetector(
+                          onTap: () {
+                            // Handle logout
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: ListTile(
+                              leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.inversePrimary),
+                              //title: Text('Lo', style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
